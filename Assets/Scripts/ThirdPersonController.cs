@@ -10,15 +10,15 @@ public class ThirdPersonController : MonoBehaviour
 
     public LayerMask groundMask;
 
-    public float jumpPower = 50f;
+    public static float jumpPower = 3f;
     public float groundDistance = 0.4f;
-    public float speed = 6f;
+    public static float speed = 6f;
     public float gravity = -9.81f;
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
     Vector3 velocity;
-    bool isGrounded = true;
+    public static bool isGrounded = true;
 
     void Update()
     {
