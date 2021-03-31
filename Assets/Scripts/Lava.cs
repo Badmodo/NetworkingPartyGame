@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Lava : MonoBehaviour
 {
     public float speed;
 
+    public GameObject player;
+    public GameObject youDied;
+
     void Update()
     {
-        transform.position += Vector3.up * speed;
+        transform.position += Vector3.up * speed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
         {
-            SceneManager.LoadScene("TestScene1");
+            Destroy(player);
+            youDied.SetActive(true);
         }
     }
 }

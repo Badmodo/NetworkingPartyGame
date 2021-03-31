@@ -10,7 +10,7 @@ public class ThirdPersonController : MonoBehaviour
 
     public LayerMask groundMask;
 
-    public float jumpPower = 3f;
+    public float jumpPower = 50f;
     public float groundDistance = 0.4f;
     public float speed = 6f;
     public float gravity = -9.81f;
@@ -40,7 +40,7 @@ public class ThirdPersonController : MonoBehaviour
         }
 
         //adding gravity
-        velocity.y += gravity + Time.deltaTime;
+        velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
         if (direction.magnitude >= 0.1f)
