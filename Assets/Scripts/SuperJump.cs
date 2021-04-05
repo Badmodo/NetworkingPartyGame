@@ -6,6 +6,10 @@ public class SuperJump : MonoBehaviour
 {
     public GameObject postProcessingJump;
 
+    public float jumpBoosted;
+    public float duration;
+    public float jumpOriginal;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
@@ -17,9 +21,9 @@ public class SuperJump : MonoBehaviour
     IEnumerator superJump()
     {
         postProcessingJump.SetActive(true);
-        ThirdPersonController.jumpPower = 8f;
-        yield return new WaitForSeconds(4f);
-        ThirdPersonController.jumpPower = 3f;
+        ThirdPersonController.jumpPower = jumpBoosted;
+        yield return new WaitForSeconds(duration);
+        ThirdPersonController.jumpPower = jumpOriginal;
         postProcessingJump.SetActive(false);
     }
 }

@@ -17,8 +17,17 @@ public class ThirdPersonController : MonoBehaviour
     public float turnSmoothTime = 0.1f;
     float turnSmoothVelocity;
 
+    public Animator animator;
+
+
     Vector3 velocity;
     public static bool isGrounded = true;
+
+    private void Awake()
+    {
+        animator = GetComponentInChildren<Animator>();
+        animator.SetBool("isIdle", true);
+    }
 
     void Update()
     {
@@ -53,6 +62,33 @@ public class ThirdPersonController : MonoBehaviour
 
             Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             controller.Move(moveDirection.normalized * speed * Time.deltaTime);            
+        }
+
+        if (direction.x != 0 || direction.z != 0)
+        {
+            animator.SetBool("isRunning", true);
+            animator.SetBool("isIdle", false);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+            animator.SetBool("isIdle", true);
+        }
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isJumping", true);
+        }
+        if (isGrounded == false)
+        {
+            animator.SetBool("isIdle", false);
+            animator.SetBool("isJumping", true);
+        }
+        else if(isGrounded == true)
+        {
+            animator.SetBool("isJumping", false);
+            //animator.SetBool("isIdle", true);
         }
     }
 }

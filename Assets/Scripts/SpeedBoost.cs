@@ -6,6 +6,10 @@ public class SpeedBoost : MonoBehaviour
 {
     public GameObject postProcessingSpeed;
 
+    public float speedBoosted;
+    public float duration;
+    public float speedOriginal;
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.gameObject.tag == "Player")
@@ -16,10 +20,10 @@ public class SpeedBoost : MonoBehaviour
 
     IEnumerator speedBoost()
     {
-        ThirdPersonController.speed = 12f;
+        ThirdPersonController.speed = speedBoosted;
         postProcessingSpeed.SetActive(true);
-        yield return new WaitForSeconds(4f);
-        ThirdPersonController.speed = 6f;
+        yield return new WaitForSeconds(duration);
+        ThirdPersonController.speed = speedOriginal;
         postProcessingSpeed.SetActive(false);
     }
 }
