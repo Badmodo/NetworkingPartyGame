@@ -8,6 +8,12 @@ public class Forcefield : MonoBehaviour
 
     public float duration;
 
+    // OnParticleCollision is called when a particle hits a collider
+    private void OnParticleCollision(GameObject other)
+    {
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Player")
