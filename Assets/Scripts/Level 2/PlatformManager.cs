@@ -12,14 +12,16 @@ namespace Platforms.Manager
         public float platformSpeed;
         public float platformTimer;
         public GameObject[] platformSpawn = new GameObject[6];
-        public GameObject[] platformEnd = new GameObject[6];
-        public Transform end;
+        
+      
 
         // Start is called before the first frame update
         void Start()
         {
+            platformTimer = platformTimer * Time.deltaTime;
             platformSpeed = platformSpeed * Time.deltaTime;
-            StartSpawning();
+            
+            StartCoroutine(SpawnPlatform());
         }
 
         // Update is called once per frame
@@ -27,25 +29,34 @@ namespace Platforms.Manager
         {
 
         }
+
         public void StartSpawning()
         {
+
+        }
+
+        IEnumerator SpawnPlatform()
+        {
+            float directionModifier = 180;
             for (int i = 0; i < platformSpawn.Length; i++)
             {
 
 
                 GameObject newPlatform = platforms[Random.Range(0, platforms.Length)];
-                // Spawn platform on the 
-                end = platformEnd[i].transform;
-                Instantiate(newPlatform, platformSpawn[i].transform.position, platformSpawn[i].transform.rotation);
-                // Move platform towards end
-
                 
+                GameObject spawnedPlatform = Instantiate(newPlatform, platformSpawn[i].transform.position,
+                    platformSpawn[i].transform.rotation );
+
+                spawnedPlatform.transform.rotation *= Quaternion.Euler(0, directionModifier, 0);
+                directionModifier += 180;
+
+
             }
+
+            yield return new WaitForSeconds(platformTimer * 80);
+
+            StartCoroutine(SpawnPlatform());
         }
-       
-
-
-
 
     }
 

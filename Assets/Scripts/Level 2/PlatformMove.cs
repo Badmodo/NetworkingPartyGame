@@ -13,7 +13,7 @@ namespace Platforms.Movement
         void OnEnable()
         {
             FindObjectOfType<PlatformManager>();
-            endPos = end;
+           // endPos = end;
             StartCoroutine(MovePlatform());
         }
 
