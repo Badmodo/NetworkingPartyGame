@@ -2,32 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformManager : MonoBehaviour
+
+namespace Platforms.Manager
 {
-    public GameObject[] platforms;
-    
-    public float platformSpeed;
-    public float platformTimer;
-    public GameObject[] platformSpawn = new GameObject[6];
-    public GameObject[] platformEnd = new GameObject[6];
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class PlatformManager : MonoBehaviour
     {
-        
-    }
+        public GameObject[] platforms;
 
-    // Update is called once per frame
-    void Update()
-    {
-        for(int i = 0; i < platformSpawn.Length; i++)
+        public float platformSpeed;
+        public float platformTimer;
+        public GameObject[] platformSpawn = new GameObject[6];
+        public GameObject[] platformEnd = new GameObject[6];
+        public Transform end;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            float step = platformSpeed * Time.deltaTime;
-            GameObject newPlatform = platforms[Random.Range(0, platforms.Length)];
-            Instantiate(newPlatform, platformSpawn[i].transform.position, platformSpawn[i].transform.rotation);
-            newPlatform.transform.position = Vector3.MoveTowards(platformSpawn[i].transform.position, platformEnd[i].transform.position, step);
+            platformSpeed = platformSpeed * Time.deltaTime;
+            StartSpawning();
         }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+        public void StartSpawning()
+        {
+            for (int i = 0; i < platformSpawn.Length; i++)
+            {
+
+
+                GameObject newPlatform = platforms[Random.Range(0, platforms.Length)];
+                // Spawn platform on the 
+                end = platformEnd[i].transform;
+                Instantiate(newPlatform, platformSpawn[i].transform.position, platformSpawn[i].transform.rotation);
+                // Move platform towards end
+
+                
+            }
+        }
+       
+
+
+
+
     }
-    
+
 }
