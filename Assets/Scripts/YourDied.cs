@@ -10,7 +10,7 @@ public class YourDied : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene("TestScene1");
+            SceneManager.LoadScene("Tower");
         }
     }
 }

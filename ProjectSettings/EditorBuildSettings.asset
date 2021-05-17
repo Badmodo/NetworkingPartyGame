@@ -6,6 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TestScene1.unity
+    path: Assets/Scenes/Offline.unity
+    guid: 562a142337c148d41b3c84964bb22abb
+  - enabled: 1
+    path: Assets/Scenes/Online.unity
+    guid: 81ebfbb96f034b845a4e84fdfbb77be5
+  - enabled: 1
+    path: Assets/Scenes/InGameMenus.unity
+    guid: 755392e7b3aceb249a7370eed648c3ac
+  - enabled: 1
+    path: Assets/Scenes/Tests/Tower.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects: {}
