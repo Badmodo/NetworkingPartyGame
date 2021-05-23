@@ -10,7 +10,7 @@ namespace Platforms.Manager
         public GameObject[] platforms;
 
         public float platformSpeed;
-        public float platformTimer;
+        public float platformTimer = 2;
         public GameObject[] platformSpawn = new GameObject[6];
         
       
@@ -18,8 +18,7 @@ namespace Platforms.Manager
         // Start is called before the first frame update
         void Start()
         {
-            platformTimer = platformTimer * Time.deltaTime;
-            platformSpeed = platformSpeed * Time.deltaTime;
+            platformSpeed *= 0.05f;
             
             StartCoroutine(SpawnPlatform());
         }
