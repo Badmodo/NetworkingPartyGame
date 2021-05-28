@@ -1,10 +1,12 @@
 using System;
 using System.Net;
-using BattleCars.UI;
 using Mirror;
 using Mirror.Discovery;
+
 using UnityEngine;
 using UnityEngine.Events;
+
+using Battlecars.UI;
 
 /*
 	Discovery Guide: https://mirror-networking.com/docs/Guides/NetworkDiscovery.html
@@ -12,62 +14,59 @@ using UnityEngine.Events;
     API Reference: https://mirror-networking.com/docs/api/Mirror.Discovery.NetworkDiscovery.html
 */
 
-namespace BattleCars.Networking
+namespace Battlecars.Networking
 {
-    [SerializeField]
 
+    // Data to send to the client
     public class DiscoveryRequest : NetworkMessage
     {
-        //name of the game
+        // The name of the game being sent
         public string gameName;
     }
 
-    //reieved by the client and converted
+    // Recieved by the client and converted
     public class DiscoveryResponse : NetworkMessage
     {
-        //the server that sent the message
-        //this is a property so that it is not serizlied but the client
+        // The server that sent this message
+        // this is a property so that it is not serialized but the client
+        // fills this up after we recieve it
         public IPEndPoint EndPoint { get; set; }
-        //uri points to the spacific part of the address (url)
+
         public Uri uri;
-        public long serverID;
-        //name of the game
+
+        public long serverId;
+
+        // The name of the game being sent
         public string gameName;
+        public string hostName;
+        public int playerCount;
+        public int maxPlayers;
     }
 
-    public class ServerFoundEvent : UnityEvent<DiscoveryResponse> { };
-
+    [Serializable] public class ServerFoundEvent : UnityEvent<DiscoveryResponse> {}
 
     public class BattlecarsNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, DiscoveryResponse>
     {
         #region Server
 
-        public long ServerID { get; private set; }
-        [Tooltip("Transport to beadvertised during discovery")]
+        public long ServerId { get; private set; }
+
+        [Tooltip("Transport to be advertised during discovery")]
         public Transport transport;
+
         [Tooltip("Invoked when a server is found")]
         public ServerFoundEvent onServerFound = new ServerFoundEvent();
 
-        private Lobby lobby;
-
         public override void Start()
         {
-            ServerID = RandomLong();
+            ServerId = RandomLong();
 
+            // If the transport wasn't set in the inspector,
+            // find the active one. activeTransport is set in awake
             if(transport == null)
-            {
                 transport = Transport.activeTransport;
-            }
 
             base.Start();
-        }
-
-        private void Update()
-        {
-            if(lobby == null)
-            {
-                lobby = FindObjectOfType<Lobby>();
-            }
         }
 
         /// <summary>
@@ -77,22 +76,31 @@ namespace BattleCars.Networking
         /// Override if you wish to provide more information to the clients
         /// such as the name of the host player
         /// </remarks>
-        /// <param name="request">Request coming from client</param>
-        /// <param name="endpoint">Address of the client that sent the request</param>
+        /// <param name="_request">Request coming from client</param>
+        /// <param name="_endpoint">Address of the client that sent the request</param>
         /// <returns>A message containing information about this server</returns>
-        protected override DiscoveryResponse ProcessRequest(DiscoveryRequest _request, IPEndPoint _endpoint)
+        protected override DiscoveryResponse ProcessRequest(DiscoveryRequest _request, IPEndPoint _endpoint) 
         {
+            BattlecarsNetworkManager netManager = BattlecarsNetworkManager.Instance;
+
             try
             {
+                // This is just an example reply message,
+                // you could add the game name here or game mode
+                // if the player wants a specific game mode.
                 return new DiscoveryResponse()
                 {
-                    serverID = ServerID,
+                    serverId = ServerId,
                     uri = transport.ServerUri(),
-                    gameName = lobby.LobbyName
+                    gameName = netManager.GameName,
+                    hostName = netManager.PlayerName,
+                    maxPlayers = netManager.maxConnections,
+                    playerCount = netManager.PlayerCount
                 };
             }
-            catch(NotImplementedException _e)
+            catch(NotImplementedException)
             {
+                // Someone dun goofed, so let us know what happened.
                 Debug.LogError($"Transport {transport} does not support network discovery");
                 throw;
             }
@@ -109,10 +117,7 @@ namespace BattleCars.Networking
         /// Override if you wish to include additional data in the discovery message
         /// such as desired game mode, language, difficulty, etc... </remarks>
         /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
-        protected override DiscoveryRequest GetRequest()
-        {
-            return new DiscoveryRequest();
-        }
+        protected override DiscoveryRequest GetRequest() => new DiscoveryRequest();
 
         /// <summary>
         /// Process the answer from a server
@@ -121,18 +126,25 @@ namespace BattleCars.Networking
         /// A client receives a reply from a server, this method processes the
         /// reply and raises an event
         /// </remarks>
-        /// <param name="response">Response that came from the server</param>
-        /// <param name="endpoint">Address of the server that replied</param>
+        /// <param name="_response">Response that came from the server</param>
+        /// <param name="_endpoint">Address of the server that replied</param>
         protected override void ProcessResponse(DiscoveryResponse _response, IPEndPoint _endpoint) 
         {
-            //I dont fully understand this code, but I know its something we need to do
+            // We don't fully understand this code, we just know it's something we need to do.
+            #region WTF
+            // we recieved a message from the remote endpoint
             _response.EndPoint = _endpoint;
+
+            // although we got a supposedly valid url we may not be able to resolve
+            // the provided host
+            // However we know the real ip address ip address of the server because we just
+            // recieve a packet from it, so use that as host.
             UriBuilder realUri = new UriBuilder(_response.uri)
             {
                 Host = _response.EndPoint.Address.ToString()
             };
-
             _response.uri = realUri.Uri;
+            #endregion
 
             onServerFound.Invoke(_response);
         }

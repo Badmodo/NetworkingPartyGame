@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Mirror;
-using BattleCars.Networking;
+using Battlecars.Networking;
 
 namespace BattleCars.UI
 {

@@ -132,7 +132,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 82007445}
-  - component: {fileID: 82007444}
   - component: {fileID: 82007443}
   - component: {fileID: 82007442}
   m_Layer: 0
@@ -181,38 +180,6 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
---- !u!114 &82007444
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 82007441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ce09e01923e32449a90daaae69a86a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  PersistNetworkManagerToOfflineScene: 0
-  runInBackground: 1
-  autoStartServerBuild: 1
-  serverTickRate: 30
-  serverBatching: 0
-  serverBatchInterval: 0
-  offlineScene: Assets/Sci-Fi Multiplayer/Scenes/Offline.unity
-  onlineScene: Assets/Sci-Fi Multiplayer/Scenes/Online.unity
-  transport: {fileID: 82007443}
-  networkAddress: localhost
-  maxConnections: 4
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 120
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 254784287134586971, guid: 10381d4fdfb04f8409945e74a32a67dd, type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 1
-  spawnPrefabs: []
-  discovery: {fileID: 82007442}
 --- !u!4 &82007445
 Transform:
   m_ObjectHideFlags: 0
@@ -591,8 +558,8 @@ MonoBehaviour:
   hostButton: {fileID: 435697674}
   connectButton: {fileID: 1748752535}
   ipText: {fileID: 2053369404}
-  networkManager: {fileID: 82007444}
-  gameTemplate: {fileID: 807198283}
+  networkManager: {fileID: 0}
+  gameTemplate: {fileID: 0}
   foundGamesHolder: {fileID: 2019226877}
 --- !u!114 &539399904
 MonoBehaviour:
@@ -920,7 +887,6 @@ GameObject:
   - component: {fileID: 807198281}
   - component: {fileID: 807198280}
   - component: {fileID: 807198279}
-  - component: {fileID: 807198283}
   m_Layer: 5
   m_Name: Button -Game
   m_TagString: Untagged
@@ -1050,19 +1016,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 807198277}
   m_CullTransparentMesh: 1
---- !u!114 &807198283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 807198277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e2541985481c244b966cba3bd38fa05, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ipDisplay: {fileID: 1618782901}
 --- !u!1 &1016929044
 GameObject:
   m_ObjectHideFlags: 0
@@ -1145,7 +1098,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 615459947}
   m_HandleRect: {fileID: 615459946}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

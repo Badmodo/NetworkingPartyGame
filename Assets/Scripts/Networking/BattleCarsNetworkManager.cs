@@ -1,66 +1,101 @@
 using UnityEngine;
+
 using Mirror;
-using System.Collections.Generic;
+
 using System.Linq;
+using System.Collections.Generic;
 
-namespace BattleCars.Networking
+namespace Battlecars.Networking
 {
-    public class BattleCarsNetworkManager : NetworkManager
+    public class BattlecarsNetworkManager : NetworkManager
     {
-        //a reference to the battlecars version of the network manager
-        public static BattleCarsNetworkManager Inastance => singleton as BattleCarsNetworkManager;
+        /// <summary>
+        /// A reference to the battlecars version of the network manager singleton.
+        /// </summary>
+        public static BattlecarsNetworkManager Instance => singleton as BattlecarsNetworkManager;
+        public BattlecarsPlayerNet LocalPlayer 
+        {
+            get
+            {
+                foreach(BattlecarsPlayerNet player in players.Values)
+                {
+                    if(player.isLocalPlayer) return player;
+                }
 
-        //wheather or not this networkmanager is the host
+                return null;
+            }
+        }
+
+        public List<BattlecarsPlayerNet> Players => players.Select(p => p.Value).ToList();
+      
+
+        public string GameName { get; set; }
+        public string PlayerName { get; set; }
+        public int PlayerCount => players.Count;
+
+        /// <summary>
+        /// Whether or not this NetworkManager is the host
+        /// </summary>
         public bool IsHost { get; private set; } = false;
 
         public BattlecarsNetworkDiscovery discovery;
 
-        //runs only when connecting to an online scene as a host
+        private Dictionary<byte, BattlecarsPlayerNet> players = new Dictionary<byte, BattlecarsPlayerNet>();
+
+        /// <summary>
+        /// Runs only when connecting to an online scene as a host
+        /// </summary>
         public override void OnStartHost()
         {
             IsHost = true;
-
             discovery.AdvertiseServer();
         }
 
-        private Dictionary<byte, BattleCarsPlayerNet> players = new Dictionary<byte, BattleCarsPlayerNet>();
-
-        //attempts to return player correstponding to the passed id
-        //if not player found, return null
-        public BattleCarsPlayerNet GetPlayerForId(byte _playerId)
+        /// <summary>
+        /// Attempts to return a player corresponding to the passed id.
+        /// If no player found, returns null (which is concerning)
+        /// </summary>
+        public BattlecarsPlayerNet GetPlayerForId(byte _playerId)
         {
-            BattleCarsPlayerNet player;
+            BattlecarsPlayerNet player;
             players.TryGetValue(_playerId, out player);
             return player;
         }
 
+        // Runs when a client connects to the server. This function is responsible for creating the player
+        // object and placing it in the scene. It is also responsible for making sure the connection is aware
+        // of what their player object is.
         public override void OnServerAddPlayer(NetworkConnection _connection)
         {
-            //give us the next spawn position depending on the spawn mode
+            // Give us the next spawn position depending on the spawnMode
             Transform spawnPos = GetStartPosition();
 
-            //spawn a player and try to use the spawnpos
-            GameObject playerObj = spawnPos != null
+            // Spawn a player and try to use the spawnPos
+            GameObject playerObj =
+                spawnPos != null
                 ? Instantiate(playerPrefab, spawnPos.position, spawnPos.rotation)
                 : Instantiate(playerPrefab);
 
-            //Assign the id adn add them to the server based on the connection
+            // Assign the players ID and add them to the server based on the connection
             AssignPlayerId(playerObj);
-            //associates connection to player object
+            // Associates the player GameObject to the network connection on the server
             NetworkServer.AddPlayerForConnection(_connection, playerObj);
         }
 
-        //removes the player with the coresponding ID
+        /// <summary>
+        /// Removes the player with the corresponding ID from the dictionary
+        /// </summary>
+        /// <param name="_id"></param>
         public void RemovePlayer(byte _id)
         {
-            //if the player is presant in the dictionacry
+            // If the player is present in the dictionary, remove them
             if(players.ContainsKey(_id))
             {
                 players.Remove(_id);
             }
         }
 
-        public void AddPlayer(BattleCarsPlayerNet _player)
+        public void AddPlayer(BattlecarsPlayerNet _player)
         {
             if(!players.ContainsKey(_player.playerId))
             {
@@ -68,26 +103,24 @@ namespace BattleCars.Networking
             }
         }
 
-        //loop through dictoinary and find a free key ID
         protected void AssignPlayerId(GameObject _playerObj)
         {
             byte id = 0;
-
-            //generate a list sorted by key values
+            //List<string> playerUsernames = players.Values.Select(x => x.username).ToList();
+            // Generate a list that is sorted by the keys value
             List<byte> playerIds = players.Keys.OrderBy(x => x).ToList();
-
+            // Loop through all keys (playerID's) in the player dictionary
             foreach(byte key in playerIds)
             {
+                // If the temp id matches this key, increment the id value
                 if(id == key)
-                {
                     id++;
-                }
-
-                //get the playernet comenant from the gameobject and assign its player ID
-                BattleCarsPlayerNet player = _playerObj.GetComponent<BattleCarsPlayerNet>();
-                player.playerId = id;
-                players.Add(id, player);
             }
+
+            // Get the playernet component from the gameobject and assign it's playerid
+            BattlecarsPlayerNet player = _playerObj.GetComponent<BattlecarsPlayerNet>();
+            player.playerId = id;
+            players.Add(id, player);
         }
     }
 }
