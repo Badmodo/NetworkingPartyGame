@@ -24,8 +24,12 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/Level 2/LavaSpawning.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Level 2/PlatformManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Networking/BattlecarsPlayerNet.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/Networking/ConnectionMenu.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/Networking/BattlecarsNetworkDiscovery.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/UI/ConnectionMenu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Networking/BattlecarsNetworkManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Networking/ConnectionMenu.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/Networking/BattleCarsPlayerNet.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/UI/DiscoveredGame.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1sczXvyIZt456cTgvBZyofRkDNr" />
@@ -76,6 +80,8 @@
       <workItem from="1621782054064" duration="2876000" />
       <workItem from="1621786171946" duration="1017000" />
       <workItem from="1621787230392" duration="1256000" />
+      <workItem from="1622223651920" duration="184000" />
+      <workItem from="1622223843958" duration="5244000" />
     </task>
     <servers />
   </component>

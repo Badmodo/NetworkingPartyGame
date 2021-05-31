@@ -7,7 +7,7 @@ using TMPro;
 
 using Battlecars.Networking;
 
-namespace Battlecars.UI
+namespace BattleCars.UI
 {
     [RequireComponent(typeof(Button))]
     public class DiscoveredGame : MonoBehaviour
@@ -43,10 +43,8 @@ namespace Battlecars.UI
         {
             // When we click the button, connect to the server displayed on the button
             networkManager.networkAddress = response.EndPoint.Address.ToString();
-            if(connectionMenu.IsJoinPlayerNamed())
-            {
-                networkManager.StartClient();
-            }
+            networkManager.StartClient();
+            
         }
     }
 }

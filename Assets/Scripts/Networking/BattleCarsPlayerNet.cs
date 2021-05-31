@@ -15,7 +15,7 @@ namespace Battlecars.Networking
         [SyncVar] public string username = "";
         [SyncVar] public bool ready = false;
 
-        [SerializeField] private new CameraMotor camera;
+   //     [SerializeField] private new CameraMotor camera;
         [SerializeField] private PlayerMotor playerMotor;
         [SerializeField] private GameObject[] matchObjects;
 
@@ -100,12 +100,12 @@ namespace Battlecars.Networking
             
            
             
-            LevelManager.LoadLevel("Gameplay");
+            SceneManager.LoadSceneAsync("Gameplay", LoadSceneMode.Additive);
             
             BattlecarsPlayerNet player = BattlecarsNetworkManager.Instance.LocalPlayer;
             FindObjectOfType<Lobby>().OnMatchStarted();
-            player.playerMotor.Enable();
-            player.camera.Enable();
+          //  player.playerMotor.Enable();
+         //   player.camera.Enable();
         }
 
         #endregion
@@ -169,7 +169,7 @@ namespace Battlecars.Networking
         public override void OnStartLocalPlayer()
         {
             // Load the scene with the lobby
-            LevelManager.LoadLevel("InGameMenus");
+            SceneManager.LoadSceneAsync("InGameMenus", LoadSceneMode.Additive);
         }
 
         // Runs when the client is disconnected from the server

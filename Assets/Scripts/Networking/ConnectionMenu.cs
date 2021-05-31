@@ -19,7 +19,7 @@ namespace BattleCars.UI
         [SerializeField]
         private TextMeshProUGUI ipText;
         [SerializeField]
-        private BattleCarsNetworkManager networkManager;
+        private BattlecarsNetworkManager networkManager;
         [SerializeField]
         private DiscoveredGame gameTemplate;
         [SerializeField]
