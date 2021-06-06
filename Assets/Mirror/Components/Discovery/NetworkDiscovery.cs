@@ -20,7 +20,7 @@ namespace Mirror.Discovery
         public Transport transport;
 
         [Tooltip("Invoked when a server is found")]
-        public ServerFoundUnityEvent OnServerFound;
+        public ServerFoundUnityEvent OnServerFound = new ServerFoundUnityEvent();
 
         public override void Start()
         {

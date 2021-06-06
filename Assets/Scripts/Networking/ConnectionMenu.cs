@@ -6,6 +6,8 @@ using UnityEngine.UI;
 using TMPro;
 using Mirror;
 using Battlecars.Networking;
+using Mirror.Discovery;
+using UnityEngine.Serialization;
 
 namespace BattleCars.UI
 {
@@ -17,13 +19,26 @@ namespace BattleCars.UI
         [SerializeField]
         private Button connectButton;
         [SerializeField]
-        private TextMeshProUGUI ipText;
+        private TextMeshProUGUI gameName;
+        [SerializeField]
+        private TextMeshProUGUI playerCount;
+        [SerializeField]
+        private TextMeshProUGUI hostName;
+        [SerializeField] 
+        private TMP_InputField playerNameInput;
+        [SerializeField] 
+        private TMP_InputField gameNameInput;
         [SerializeField]
         private BattlecarsNetworkManager networkManager;
         [SerializeField]
         private DiscoveredGame gameTemplate;
         [SerializeField]
         private Transform foundGamesHolder;
+
+        [SerializeField]
+        private Text ipText;
+
+        private NetworkDiscovery networkDiscovery;
 
         private Dictionary<IPAddress, DiscoveredGame> discoveredGames = new Dictionary<IPAddress, DiscoveredGame>();
 
@@ -33,13 +48,15 @@ namespace BattleCars.UI
             hostButton.onClick.AddListener(() => networkManager.StartHost());
             connectButton.onClick.AddListener(OnClickConnect);
 
+            
             networkManager.discovery.onServerFound.AddListener(OnDetectServer);
             networkManager.discovery.StartDiscovery();
+           // networkDiscovery.StartDiscovery();
         }
 
         private void OnClickConnect()
         {
-            networkManager.networkAddress = ipText.text.Trim((char)8203);
+            networkManager.networkAddress = ipText.text;
             networkManager.StartClient();
         }
 
@@ -61,5 +78,10 @@ namespace BattleCars.UI
                 }
             }
         }
+
+        private void NamingPlayer() => playerNameInput.interactable = true;
+        
+        
+
     }
 }
